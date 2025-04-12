@@ -9,94 +9,82 @@
 
 <body class="container bg-light">
 
-<%- include("partials/header.ejs") %>
-<%- include("partials/nav.ejs") %>
+    <%- include("partials/header.ejs") %>
+    <%- include("partials/nav.ejs") %>
 
-<div class="text-center mt-4">
-    <h2 class="text-secondary">Cotización Automóvil</h2>
-    <hr>
-</div>
-
-<section class="formulario">
-    <div class="container">
-        <form action="/cotizacion" method="post" onsubmit="return validar()">
-            <div class="mb-3">
-                <label for="valor" class="form-label">Valor del Automóvil:</label>
-                <input type="number" name="valor" id="valor"  value="<%= valor %>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="pinicial" >Porcentaje Pago Inicial:</label>
-                <input type="number" name="pinicial" id="pinicial" value="<%= pinicial %>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="plazos">Plazos:</label>
-                <select name="plazos" id="plazos" class="select">
-                    <option value="12" <%= plazos == 12 ? "selected" : "" %>>12 Meses</option>
-                    <option value="24" <%= plazos == 24 ? "selected" : "" %>>24 Meses</option>
-                    <option value="36" <%= plazos == 36 ? "selected" : "" %>>36 Meses</option>
-                    <option value="48" <%= plazos == 48 ? "selected" : "" %>>48 Meses</option>
-                    <option value="60" <%= plazos == 60 ? "selected" : "" %>>60 Meses</option>
-                </select>
-            </div>
-
-            <div class = "buttons">
-                <button type="submit" class="btn btn-primary me-2">Enviar</button>
-                <a href="/cotizacion" class="btn btn-secondary">Limpiar</a>
-            </div>
-        </form>
-    </div>
-</section>
-
-<% if (valor && pinicial && plazos) { 
-    let pagoInicial = valor * (pinicial / 100);
-    let totalFin = valor - pagoInicial;
-    let pagoMensual = totalFin / plazos;
-%>
-<section class="container mt-5">
-    <div class="text-center">
-        <h3>Resultado de la Cotización</h3>
+    <div class="text-center mt-4">
+        <h2>Cotización Automóvil</h2>
         <hr>
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Valor</th>
-                <th>Pago Inicial</th>
-                <th>Total a Financiar</th>
-                <th>Pago Mensual</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>$<%= valor %></td>
-                <td>$<%= pagoInicial %></td>
-                <td>$<%= totalFin %></td>
-                <td>$<%= pagoMensual %></td>
-            </tr>
-        </tbody>
-    </table>
-</section>
-<% } %>
+    <section>
+        <form action="/cotizacion" method="post" class="mx-auto mt-4" style="max-width: 400px;" onsubmit="return validar()">
+            <label for="valor" class="form-label">Valor del Automóvil:</label>
+            <input type="number" name="valor" id="valor" class="form-control mb-3" value="<%= valor %>" required>
 
-<%- include("partials/footer.ejs") %>
+            <label for="pinicial" class="form-label">Porcentaje Pago Inicial:</label>
+            <input type="number" name="pinicial" id="pinicial" class="form-control mb-3" value="<%= pinicial %>" required>
 
-<script>
-    function validar() {
-        var pinicial = document.getElementById("pinicial").value;
-        if (pinicial < 0) {
-            alert("El porcentaje debe ser mayor o igual a 0");
-            return false;
+            <label for="plazos" class="form-label">Plazos:</label>
+            <select name="plazos" id="plazos" class="form-select mb-3">
+                <option value="12" <%= plazos == 12 ? "selected" : "" %>>12 Meses</option>
+                <option value="24" <%= plazos == 24 ? "selected" : "" %>>24 Meses</option>
+                <option value="36" <%= plazos == 36 ? "selected" : "" %>>36 Meses</option>
+                <option value="48" <%= plazos == 48 ? "selected" : "" %>>48 Meses</option>
+                <option value="60" <%= plazos == 60 ? "selected" : "" %>>60 Meses</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary me-2">Enviar</button>
+            <a href="/cotizacion" class="btn btn-secondary">Limpiar</a>
+        </form>
+    </section>
+
+    <% if (valor && pinicial && plazos) { 
+        let pagoInicial = valor * (pinicial / 100);
+        let totalFin = valor - pagoInicial;
+        let pagoMensual = totalFin / plazos;
+    %>
+    <section class="mt-5">
+        <div class="text-center">
+            <h3>Resultado de la Cotización</h3>
+            <hr>
+        </div>
+        <table class="table table-bordered mx-auto" style="max-width: 600px;">
+            <thead>
+                <tr>
+                    <th>Valor</th>
+                    <th>Pago Inicial</th>
+                    <th>Total a Financiar</th>
+                    <th>Pago Mensual</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>$<%= valor %></td>
+                    <td>$<%= pagoInicial %></td>
+                    <td>$<%= totalFin %></td>
+                    <td>$<%= pagoMensual %></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <% } %>
+
+    <%- include("partials/footer.ejs") %>
+
+    <script>
+        function validar() {
+            var pinicial = document.getElementById("pinicial").value;
+            if (pinicial < 0) {
+                alert("El porcentaje debe ser mayor o igual a 0");
+                return false;
+            }
+            if (pinicial > 100) {
+                alert("El porcentaje debe ser menor o igual a 100");
+                return false;
+            }
+            return true;
         }
-        if (pinicial > 100) {
-            alert("El porcentaje debe ser mnr o igual a 100");
-            return false;
-        }
-        return true;
-    }
-</script>
-
+    </script>
 </body>
 </html>
