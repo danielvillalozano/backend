@@ -1,50 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-
-
-    <title>Nodejs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel ="stylesheet" href = "/bootstrap/css/bootstrap.min.css">
+    <title>NodeJs</title>
 </head>
-
-
-<body class="container">
-    <%- include ('partials/header.ejs') %>
-    <%- include ('partials/nav.ejs') %>
-    <header>
-        <img src="/logo.jpg" alt="">
+<body class = "container">
+    <center>
+    <%- include('partials/header.ejs')%>
+    <%- include('partials/nav.ejs')%>
+        <img src ="/img/logoupsin.png" alt="">    
+   
+        <h3><%=titulo%></h3>
+    </center>
+    <section>
         <center>
-            <h3>Practica 01</h3>
+            <hr>
+            <table class = "table">
+                <tr>
+                <th>Matricula</th>
+                <th>Nombre</th>
+                <th>Sexo</th>
+                <th>Materias</th>
+            </tr>
+            <%
+            for(i=0; i<listado.length; ++i) { %>
+                <tr>
+                    <td><%=listado[i].matricula%></td>
+                    <td><%=listado[i].nombre%></td>
+                    <td><%=listado[i].sexo%></td>
+                    <td><%=listado[i].materias%></td>
+                </tr>
+            <%
+                }
+                %>
+            </table>
         </center>
-        <section>
-            <center>
-                <hr>
-
-                <table class="table">
-                    <tr>
-                        <th>Matricula</th>
-                        <th>Nombre</th>
-                        <th>Sexo</th>
-                        <th>Materias</th>
-                    </tr>
-                    <%
-                     for(i=0;i<listado.lenght;++i){ %>
-                        <tr>
-                            <td><%=listado[i].matricula%></td>
-                            <td><%=listado[i].nombre%></td>
-                            <td><%=listado[i].sexo%></td>
-                            <td><%=listado[i].materias%></td>
-                        </tr>
-
-                <% 
-                    }
-                   %>
-                </table>
-            </center>
-
-
-        </section>
-    </header>
-    <%- include ('partials/footer.ejs') %>
+    </section>
 </body>
-<html>
+<%- include('partials/footer.ejs')%>
+</html>

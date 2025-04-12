@@ -140,7 +140,7 @@ app.post('/cotizacion',(req,res)=>{
         res.render('p03', params)});
 
     
-
-        app.listen(3000, () => {
-            console.log("Servidor en puerto 3000");
-          });
+        const PORT = 4000; // Cambiar a un puerto diferente
+        app.listen(PORT, () => {
+            console.log(`Servidor corriendo en el puerto ${PORT}`);
+        });
