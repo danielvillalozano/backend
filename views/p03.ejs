@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <title>Nodejs PreExamen</title>
+</head>
+
+<body class="container bg-light">
+
+<%- include("partials/header.ejs") %>
+<%- include("partials/nav.ejs") %>
+
+<div class="text-center mt-4">
+    <h2 class="text-secondary">Recibo de Nomina</h2>
+    <hr>
+</div>
+
+<section class="formulario">
+    <div class="container">
+        <form action="/papeleria" method="post" onsubmit="return validar()">
+            <div class="mb-3">
+                <label for="num" class="form-label">Num Recibo:</label>
+                <input type="number" name="num" id="num"  value="<%= num %>" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="nombre" >Nombre:</label>
+                <input type="text" name="nombre" id="nombre" value="<%= nombre %>" required>
+            </div>
+            <br>
+            <br>
+            <div class="mb-3">
+                <label for="puesto">Puesto:</label>
+                <select name="puesto" id="puesto" class="select">
+                    <option value="100" <%= puesto == 100 ? "selected" : "" %>>Auxiliar</option>
+                    <option value="200" <%= puesto == 200 ? "selected" : "" %>>Albañil</option>
+                    <option value="300" <%= puesto == 300 ? "selected" : "" %>>Ingeniero</option>
+                </select>
+            </div>
+                <br>
+                <br>
+                <div class="mb-3">
+                    <label for="nivel">Nivel:</label>
+                    <select name="nivel" id="nivel" class="select">
+                        <option value="0.05" <%= nivel ==  0.05 ? "selected" : "" %>>Nivel 1</option>
+                        <option value="0.03" <%= nivel == 0.03 ?  "selected" : "" %>>Nivel 2</option>
+                    </select>
+                </div>
+                <br>
+                <br>
+                <label for="dias" >Dias trabajados:</label>
+                <input type="number" name="dias" id="dias" value="<%= dias %>" required>
+            </div>
+            <hr>
+            <hr>
+            <div class = "buttons">
+                <button type="submit" class="btn btn-primary me-2">Enviar</button>
+                <a href="/recibo" class="btn btn-secondary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<section class="container mt-5">
+    <div class="text-center">
+        <h3>Resultados</h3>
+        <hr>
+    </div>
+
+    <% 
+    if (num && nombre && puesto && nivel && dias) { 
+      let pago = puesto * dias;
+      let impuesto = pago * nivel;
+      let pagoTotal = pago - impuesto;
+    %>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pago Inicial</th>
+                <th>Impuesto</th>
+                <th>Pago Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>$<%= pago %></td>
+                <td>$<%= impuesto %></td>
+                <td>$<%= pagoTotal %></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <%}
+    %>
+    
+</section>
+
+<%- include("partials/footer.ejs") %>
+
+<script>
+    function validar() {
+        var pinicial = document.getElementById("dias").value;
+        if (pinicial < 0) {
+            alert("Los dias deben ser mayor a 0");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+</html>

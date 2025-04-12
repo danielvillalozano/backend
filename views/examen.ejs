@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel ="stylesheet" href = "/bootstrap/css/bootstrap.min.css">
+    <title>Examen</title>
+</head>
+<body class="container">
+    <%- include('partials/header.ejs') %>
+    <%- include('partials/nav.ejs') %>
+
+    <div class="container">
+        <br>
+        <center>
+            <h3>Listado de Alumnos</h3>
+        </center>
+        <section class="formulario-container" style="padding: 20px;">
+            <div id="formulario" class="container">
+                <form action="/siia" method="post">
+                    <div class="form-group">
+                        <label for="nivel">Nivel:</label>
+                        <select name="nivel" id="nivel" class="form-control">
+                            <option value="1" <%= nivel == 1 ? 'selected' : '' %>>Primaria</option>
+                            <option value="2" <%= nivel == 2 ? 'selected' : '' %>>Secundaria</option>
+                            <option value="3" <%= nivel == 3 ? 'selected' : '' %>>Preparatoria</option>
+                            <option value="4" <%= nivel == 4 ? 'selected' : '' %>>Todos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="turno">Turno:</label>
+                        <select name="turno" id="turno" class="form-control">
+                            <option value="1" <%= turno == 1 ? 'selected' : '' %>>Matutino</option>
+                            <option value="2" <%= turno == 2 ? 'selected' : '' %>>Vespertino</option>
+                            <option value="3" <%= turno == 3 ? 'selected' : '' %>>Todos</option>
+                        </select>
+                    </div>
+                    <label for="tipo">Tipo de vista:</label>
+                    <select name="tipo" id="tipo" class="form-control">
+                        <option value="1" <%= tipo == 1 ? 'selected' : '' %>>Resumen</option>
+                        <option value="2" <%= tipo == 2 ? 'selected' : '' %>>Detalle</option>
+                    </select>
+                    <div class="buttons" style="margin: 20px 0px;">
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                        <a href="/siia" class="btn btn-secondary">Limpiar</a>
+                    </div>
+
+                </div>
+                </form>
+            </div>
+        </section>
+
+        
+        <section class="container">
+            <center>
+                <%if(tipo==2){%>
+                <hr>
+                <h2>Alumnos</h2>
+                <hr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Matricula</th>
+                            <th>Nombre</th>
+                            <th>Promedio</th>
+                            <th>Nivel</th>
+                            <th>Turno</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% 
+                        const niveles = {
+                            1: 'Primaria',
+                            2: 'Secundaria',
+                            3: 'Preparatoria',
+                        };
+                        const turnos = {
+                            1: 'Matutino',
+                            2: 'Vespertino',
+};
+                        
+                        alumnos.forEach(alumno => { 
+                        %>
+                            <tr>
+                                <td><%= alumno.matricula %></td>
+                                <td><%= alumno.nombre %></td>
+                                <td><%= alumno.promedio %></td>
+                                <td><%= niveles[alumno.nivel]%></td>
+                                <td><%= turnos[alumno.turno]%></td>
+                            </tr>
+                        <% }) %>
+
+
+                        <%}%>
+                            <%let promedioGeneral=0%>
+                            <%let contadorAprobados=0%>
+                            <%let contadorReprobados=0%>
+                            <%let contador=0%>
+                        <%if(tipo==1){ %>
+                            <%alumnos.forEach(alumno =>{%>
+                                <%contador = contador + 1%>
+                                <%promedioGeneral = promedioGeneral + alumno.promedio%>
+                                <%if(alumno.promedio<=7){contadorReprobados=contadorReprobados+1}%>
+                                <%if(alumno.promedio>=7){contadorAprobados=contadorAprobados+1}%>
+                            <%})%>
+                            <%promedioGeneral=promedioGeneral/contador%>
+                            <p><strong>Registros</strong></p>
+                            <p><strong><%=contador%></strong></p>
+                            <p><strong>Promedio General:</strong></p>
+                            <p><strong><%=promedioGeneral.toFixed(2)%></strong></p>
+                            <p><strong>Alumnos con promedio menor a 7</strong></p>
+                            <p><strong><%=contadorReprobados%></strong></p>
+                            <p><strong>Alumnos con promedio mayor a 7:</strong></p>
+                            <p><strong><%=contadorAprobados%></strong></p>
+                            <%}%>
+                   
+                    </tbody>
+                </table>
+            </center>
+        </section>
+    </div>
+    <%- include('partials/footer.ejs') %>
+</body>
+</html>

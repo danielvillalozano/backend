@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel ="stylesheet" href = "/bootstrap/css/bootstrap.min.css">
+    <title>Productos</title>
+</head>
+<body class="container">
+    <%- include('partials/header.ejs') %>
+    <%- include('partials/nav.ejs') %>
+
+    <div class="container">
+        <br>
+        <center>
+            <h3>Filtar Productos por tipo</h3>
+        </center>
+        <section class="formulario-container" style="padding: 20px;">
+            <div id="formulario" class="container">
+                <form action="/papeleria" method="post">
+                    <div class="form-group">
+                        <label for="tipo">Filtrar por Tipo:</label>
+                        <select name="tipo" id="tipo" class="form-control">
+                            <option value="1" <%= tipo == 1 ? 'selected' : '' %>>Tipo 1</option>
+                            <option value="2" <%= tipo == 2 ? 'selected' : '' %>>Tipo 2</option>
+                            <option value="3" <%= tipo == 3 ? 'selected' : '' %>>Tipo 3</option>
+                        </select>
+                    </div>
+                    <div class="buttons" style="margin: 20px 0px;">
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                        <a href="/papeleria" class="btn btn-secondary">Limpiar</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        
+        <section class="container">
+            <center>
+                <hr>
+                <h2>Productos</h2>
+                <hr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Costo</th>
+                            <th>Costo Venta</th>
+                            <th>Cantidad</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let totalCosto = 0, totalVenta = 0, totalCantidad = 0; %>
+                        <% productos.forEach(producto => { %>
+                            <% let costoVenta = producto.costo * 1.15; %>
+                            <% totalCosto += producto.costo * producto.cantidad; %>
+                            <% totalVenta += costoVenta * producto.cantidad; %>
+                            <% totalCantidad += producto.cantidad; %>
+                            <tr>
+                                <td><%= producto.id %></td>
+                                <td><%= producto.producto %></td>
+                                <td><%= producto.costo %></td>
+                                <td><%= costoVenta.toFixed(2) %></td>
+                                <td><%= producto.cantidad %></td>
+                                <td><%= producto.tipo %></td>
+                            </tr>
+                        <% }) %>
+                            <tr>
+                                <td><strong>Total Costo:</strong></td>
+                                <td><%= totalCosto.toFixed(2) %></td>
+                                <td><strong>Total Costo Venta:</strong></td>
+                                <td><%= totalVenta.toFixed(2) %></td>
+                                <td><strong><%= totalCantidad %></strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ganancia</strong></td>
+                                <td><%= (totalVenta - totalCosto).toFixed(2) %></td>
+                            </tr>
+                    </tbody>
+                </table>
+            </center>
+        </section>
+    </div>
+    <%- include('partials/footer.ejs') %>
+</body>
+</html>
